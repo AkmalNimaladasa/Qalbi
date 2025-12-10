@@ -78,10 +78,7 @@
 
   <div class="card">
     <h1 class="title">Akmal ❤️ Jumana</h1>
-    <div class="subtitle">Nikah date - January 11, 2026
-.
-......................................................................
-And one of His signs is that He created for you spouses from among yourselves so that you may find comfort in them (30:21) </div>
+    <div class="subtitle">Nikah date - January 11, 2026<br>And one of His signs is that He created for you spouses from among yourselves so that you may find comfort in them (30:21)</div>
 
     <div class="img-wrap">
       <img src="assets/our.jpg" alt="Akmal & Jumana" class="square-img" />
@@ -116,23 +113,20 @@ And one of His signs is that He created for you spouses from among yourselves so
 
     const audio = document.getElementById('bgAudio');
 
-    async function forcePlay() {
-      try {
-        audio.muted = true;
-        await audio.play();
-        audio.muted = false;
-      } catch (e) {
-        document.addEventListener('click', tryPlayOnce, { once: true });
-        document.addEventListener('touchstart', tryPlayOnce, { once: true });
-      }
-    }
-
-    function tryPlayOnce() {
+    // Autoplay fix for modern browsers
+    audio.muted = true;
+    audio.play().then(() => {
       audio.muted = false;
-      audio.play().catch(()=>{});
-    }
-
-    forcePlay();
+    }).catch(() => {
+      const unmute = () => {
+        audio.muted = false;
+        audio.play().catch(()=>{});
+        document.removeEventListener('click', unmute);
+        document.removeEventListener('touchstart', unmute);
+      };
+      document.addEventListener('click', unmute);
+      document.addEventListener('touchstart', unmute);
+    });
   </script>
 
 </body>
