@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Akmal ❤️ Jumana - Nikah Countdown</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap');
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Great Vibes", cursive;
+      background: #E30B5D;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      color: #000000;
+      font-size: 22px;
+    }
+
+    .card {
+      background: #ffffff;
+      border: 2px solid #E30B5D;
+      width: 100%;
+      max-width: 430px;
+      padding: 32px;
+      border-radius: 24px;
+      box-shadow: 0 6px 25px rgba(0,0,0,0.12);
+      text-align: center;
+      animation: fadeIn 0.8s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .title {
+      font-size: 54px;
+      font-weight: 700;
+      margin: 0 0 8px;
+      color: #E30B5D;
+    }
+
+    .subtitle {
+      font-size: 24px;
+      color: #000000;
+      margin-bottom: 28px;
+    }
+
+    .img-wrap {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      margin-bottom: 22px;
+    }
+    .square-img {
+      width: 280px;
+      height: 280px;
+      border-radius: 16px;
+      object-fit: cover;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+      border: 3px solid #E30B5D;
+    }
+
+    #countdown {
+      margin-top: 14px;
+      font-size: 32px;
+      font-weight: 600;
+      color: #E30B5D;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="card">
+    <h1 class="title">Akmal ❤️ Jumana</h1>
+    <div class="subtitle">Nikah date - January 11, 2026
+.
+......................................................................
+And one of His signs is that He created for you spouses from among yourselves so that you may find comfort in them (30:21) </div>
+
+    <div class="img-wrap">
+      <img src="assets/our.jpg" alt="Akmal & Jumana" class="square-img" />
+    </div>
+
+    <div id="countdown">Loading…</div>
+  </div>
+
+  <audio id="bgAudio" src="assets/audio.mp3" preload="auto" loop></audio>
+
+  <script>
+    const target = new Date("2026-01-11T00:00:00+05:30").getTime();
+    function updateCountdown() {
+      const now = Date.now();
+      const diff = target - now;
+      const el = document.getElementById("countdown");
+
+      if (diff <= 0) {
+        el.textContent = "MashaAllah — the day is here!";
+        return;
+      }
+
+      const d = Math.floor(diff / (1000*60*60*24));
+      const h = Math.floor((diff % (1000*60*60*24)) / (1000*60*60));
+      const m = Math.floor((diff % (1000*60*60)) / (1000*60));
+      const s = Math.floor((diff % (1000*60)) / 1000);
+
+      el.textContent = `${d} days · ${String(h).padStart(2,'0')}h · ${String(m).padStart(2,'0')}m · ${String(s).padStart(2,'0')}s`;
+    }
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
+
+    const audio = document.getElementById('bgAudio');
+
+    async function forcePlay() {
+      try {
+        audio.muted = true;
+        await audio.play();
+        audio.muted = false;
+      } catch (e) {
+        document.addEventListener('click', tryPlayOnce, { once: true });
+        document.addEventListener('touchstart', tryPlayOnce, { once: true });
+      }
+    }
+
+    function tryPlayOnce() {
+      audio.muted = false;
+      audio.play().catch(()=>{});
+    }
+
+    forcePlay();
+  </script>
+
+</body>
+</html>
