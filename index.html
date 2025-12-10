@@ -76,14 +76,13 @@
 
     #playButton {
       margin-top: 20px;
-      padding: 12px 24px;
+      padding: 14px 28px;
       font-size: 18px;
       background: #E30B5D;
       color: #fff;
       border: none;
       border-radius: 12px;
       cursor: pointer;
-      display: inline-block;
     }
   </style>
 </head>
@@ -103,11 +102,11 @@
     <div id="countdown">Loading…</div>
   </div>
 
-  <!-- Audio in same folder -->
+  <!-- Audio -->
   <audio id="bgAudio" src="audio.mp3" preload="auto" loop></audio>
 
   <!-- Play button -->
-  <button id="playButton">Tap to Play Music 🎵</button>
+  <button id="playButton">Play Music 🎵</button>
 
   <script>
     // Countdown
@@ -132,30 +131,23 @@
     updateCountdown();
     setInterval(updateCountdown, 1000);
 
-    // Audio
+    // Audio logic
     const audio = document.getElementById('bgAudio');
     const playButton = document.getElementById('playButton');
 
     function startAudio() {
-      audio.play().catch(()=>{}); // try play, ignore errors
-      playButton.style.display = 'none'; // hide button
+      audio.play().catch(()=>{});
+      playButton.style.display = 'none';
     }
 
-    // Show button if autoplay is blocked
-    window.addEventListener('load', () => {
-      audio.play().then(() => {
-        playButton.style.display = 'none'; // autoplay worked
-      }).catch(() => {
-        playButton.style.display = 'inline-block'; // show button
-      });
-    });
-
-    // Play button click
+    // Always show button; user clicks to start audio
     playButton.addEventListener('click', startAudio);
 
-    // Also play on first tap/click anywhere as fallback
-    document.addEventListener('click', startAudio, { once: true });
-    document.addEventListener('touchstart', startAudio, { once: true });
+    // Optional: allow first page tap anywhere to start audio
+    document.addEventListener('click', () => {
+      if (!audio.paused) return;
+      startAudio();
+    }, { once: true });
   </script>
 
 </body>
