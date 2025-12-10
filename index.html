@@ -78,7 +78,10 @@
 
   <div class="card">
     <h1 class="title">Akmal ❤️ Jumana</h1>
-    <div class="subtitle">Nikah date - January 11, 2026<br>And one of His signs is that He created for you spouses from among yourselves so that you may find comfort in them (30:21)</div>
+    <div class="subtitle">
+      Nikah date - January 11, 2026<br>
+      And one of His signs is that He created for you spouses from among yourselves so that you may find comfort in them (30:21)
+    </div>
 
     <div class="img-wrap">
       <img src="assets/our.jpg" alt="Akmal & Jumana" class="square-img" />
@@ -87,8 +90,8 @@
     <div id="countdown">Loading…</div>
   </div>
 
-  <!-- Fixed audio tag -->
- `<audio src="assets/audio.mp3" loop autoplay></audio>`. loop autoplay></audio>`
+  <!-- Corrected audio -->
+  <audio id="bgAudio" src="assets/audio.mp3" preload="auto" loop></audio>
 
   <script>
     // Countdown
@@ -113,22 +116,20 @@
     updateCountdown();
     setInterval(updateCountdown, 1000);
 
-    // Audio autoplay fix
+    // Autoplay fix for modern browsers
     const audio = document.getElementById('bgAudio');
     audio.muted = true;
 
-    function playAudio() {
+    function tryPlayAudio() {
       audio.play().then(() => {
         audio.muted = false;
       }).catch(() => {
-        // wait for user interaction if blocked
+        // wait for first user interaction
       });
     }
 
-    // Try autoplay on load
-    window.addEventListener('load', playAudio);
+    window.addEventListener('load', tryPlayAudio);
 
-    // Fallback: play on first user interaction
     function handleInteraction() {
       audio.muted = false;
       audio.play().catch(()=>{});
@@ -142,4 +143,3 @@
 
 </body>
 </html>
-
