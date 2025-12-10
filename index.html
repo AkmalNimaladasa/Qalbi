@@ -87,9 +87,11 @@
     <div id="countdown">Loading…</div>
   </div>
 
-  `<audio src="assets/audio.mp3" loop autoplay></audio>`
+  <!-- Fixed audio tag -->
+  <audio id="bgAudio" src="assets/audio.mp3" preload="auto" loop></audio>
 
   <script>
+    // Countdown
     const target = new Date("2026-01-11T00:00:00+05:30").getTime();
     function updateCountdown() {
       const now = Date.now();
@@ -111,25 +113,32 @@
     updateCountdown();
     setInterval(updateCountdown, 1000);
 
+    // Audio autoplay fix
     const audio = document.getElementById('bgAudio');
-
-    // Autoplay fix for modern browsers
     audio.muted = true;
-    audio.play().then(() => {
-      audio.muted = false;
-    }).catch(() => {
-      const unmute = () => {
+
+    function playAudio() {
+      audio.play().then(() => {
         audio.muted = false;
-        audio.play().catch(()=>{});
-        document.removeEventListener('click', unmute);
-        document.removeEventListener('touchstart', unmute);
-      };
-      document.addEventListener('click', unmute);
-      document.addEventListener('touchstart', unmute);
-    });
+      }).catch(() => {
+        // wait for user interaction if blocked
+      });
+    }
+
+    // Try autoplay on load
+    window.addEventListener('load', playAudio);
+
+    // Fallback: play on first user interaction
+    function handleInteraction() {
+      audio.muted = false;
+      audio.play().catch(()=>{});
+      document.removeEventListener('click', handleInteraction);
+      document.removeEventListener('touchstart', handleInteraction);
+    }
+
+    document.addEventListener('click', handleInteraction);
+    document.addEventListener('touchstart', handleInteraction);
   </script>
 
 </body>
 </html>
-
-
