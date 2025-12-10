@@ -83,7 +83,7 @@
       border: none;
       border-radius: 12px;
       cursor: pointer;
-      display: none;
+      display: inline-block;
     }
   </style>
 </head>
@@ -106,7 +106,7 @@
   <!-- Audio in same folder -->
   <audio id="bgAudio" src="audio.mp3" preload="auto" loop></audio>
 
-  <!-- Play button fallback for mobile -->
+  <!-- Play button -->
   <button id="playButton">Tap to Play Music 🎵</button>
 
   <script>
@@ -132,30 +132,30 @@
     updateCountdown();
     setInterval(updateCountdown, 1000);
 
-    // Audio setup
+    // Audio
     const audio = document.getElementById('bgAudio');
     const playButton = document.getElementById('playButton');
 
-    function tryAutoplay() {
-      audio.play().then(() => {
-        playButton.style.display = 'none'; // hide button if autoplay works
-      }).catch(() => {
-        playButton.style.display = 'inline-block'; // show button if autoplay blocked
-      });
+    function startAudio() {
+      audio.play().catch(()=>{}); // try play, ignore errors
+      playButton.style.display = 'none'; // hide button
     }
 
-    // Try autoplay on page load
-    window.addEventListener('load', tryAutoplay);
-
-    // Play button fallback
-    playButton.addEventListener('click', () => {
-      audio.play().catch(()=>{});
-      playButton.style.display = 'none';
+    // Show button if autoplay is blocked
+    window.addEventListener('load', () => {
+      audio.play().then(() => {
+        playButton.style.display = 'none'; // autoplay worked
+      }).catch(() => {
+        playButton.style.display = 'inline-block'; // show button
+      });
     });
 
-    // Also allow click/touch anywhere as fallback
-    document.addEventListener('click', () => audio.play().catch(()=>{}), { once: true });
-    document.addEventListener('touchstart', () => audio.play().catch(()=>{}), { once: true });
+    // Play button click
+    playButton.addEventListener('click', startAudio);
+
+    // Also play on first tap/click anywhere as fallback
+    document.addEventListener('click', startAudio, { once: true });
+    document.addEventListener('touchstart', startAudio, { once: true });
   </script>
 
 </body>
